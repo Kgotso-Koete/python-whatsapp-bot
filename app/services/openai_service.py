@@ -22,14 +22,26 @@ def create_assistant(file):
     """
     You currently cannot set the temperature for Assistant via the API.
     """
+    # Step 1: Create a vector store
+    vs = client.vector_stores.create(
+        name="Airbnb FAQ Knowledge Base",
+        file_ids=[file.id]
+    )
+
+    # Step 2: Create the assistant with file_search
     assistant = client.beta.assistants.create(
         name="WhatsApp AirBnb Assistant",
         instructions="You're a helpful WhatsApp assistant that can assist guests that are staying in our Paris AirBnb. Use your knowledge base to best respond to customer queries. If you don't know the answer, say simply that you cannot help with question and advice to contact the host directly. Be friendly and funny.",
-        tools=[{"type": "retrieval"}],
+        tools=[{"type": "file_search"}],
         model="gpt-4-1106-preview",
-        file_ids=[file.id],
+        tool_resources={
+            "file_search": {
+                "vector_store_ids": [vs.id]
+            }
+        }
     )
     return assistant
+
 
 
 # Use context manager to ensure the shelf file is closed properly

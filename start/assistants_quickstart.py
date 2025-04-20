@@ -6,6 +6,7 @@ import time
 
 load_dotenv()
 OPEN_AI_API_KEY = os.getenv("OPEN_AI_API_KEY")
+OPENAI_ASSISTANT_ID = os.getenv("OPENAI_ASSISTANT_ID")
 client = OpenAI(api_key=OPEN_AI_API_KEY)
 
 
@@ -25,21 +26,25 @@ file = upload_file("../data/airbnb-faq.pdf")
 # Create assistant
 # --------------------------------------------------------------
 def create_assistant(file):
-    """
-    You currently cannot set the temperature for Assistant via the API.
-    """
+    # Step 1: Create a vector store
+    vs = client.vector_stores.create(
+        name="Airbnb FAQ Knowledge Base",
+        file_ids=[file.id]
+    )
+
+    # Step 2: Create the assistant with file_search
     assistant = client.beta.assistants.create(
         name="WhatsApp AirBnb Assistant",
         instructions="You're a helpful WhatsApp assistant that can assist guests that are staying in our Paris AirBnb. Use your knowledge base to best respond to customer queries. If you don't know the answer, say simply that you cannot help with question and advice to contact the host directly. Be friendly and funny.",
-        tools=[{"type": "retrieval"}],
+        tools=[{"type": "file_search"}],
         model="gpt-4-1106-preview",
-        file_ids=[file.id],
+        tool_resources={
+            "file_search": {
+                "vector_store_ids": [vs.id]
+            }
+        }
     )
     return assistant
-
-
-assistant = create_assistant(file)
-
 
 # --------------------------------------------------------------
 # Thread management
@@ -91,7 +96,7 @@ def generate_response(message_body, wa_id, name):
 # --------------------------------------------------------------
 def run_assistant(thread):
     # Retrieve the Assistant
-    assistant = client.beta.assistants.retrieve("asst_7Wx2nQwoPWSf710jrdWTDlfE")
+    assistant = client.beta.assistants.retrieve(OPENAI_ASSISTANT_ID)
 
     # Run the assistant
     run = client.beta.threads.runs.create(
@@ -115,6 +120,7 @@ def run_assistant(thread):
 # --------------------------------------------------------------
 # Test assistant
 # --------------------------------------------------------------
+# assistant = create_assistant(file)
 
 new_message = generate_response("What's the check in time?", "123", "John")
 
