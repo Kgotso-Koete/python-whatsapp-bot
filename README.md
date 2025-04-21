@@ -2,6 +2,11 @@
 
 This guide will walk you through the process of creating a WhatsApp bot using the Meta (formerly Facebook) Cloud API with pure Python, and Flask particular. We'll also integrate webhook events to receive messages in real-time and use OpenAI to generate AI responses. For more information on the structure of the Flask application, you can refer to [this documentation](https://github.com/daveebbelaar/python-whatsapp-bot/tree/main/app).
 
+## Acknowledgements
+
+1. Thank you to Dave Ebbelaar for great tutorials, [How To Connect OpenAI To WhatsApp](https://www.youtube.com/watch?v=3YPeh-3AFmM&ab_channel=DaveEbbelaar) and [OpenAI Assistants Tutorial for Beginners](https://youtu.be/0h1ry-SqINc?si=GOhrtOgFYr2wZ6HV).
+2. THis repository is a fork of the [original by Dave Ebbelaar](https://github.com/daveebbelaar/python-whatsapp-bot).
+
 ## Prerequisites
 
 1. A Meta developer account — If you don’t have one, you can [create a Meta developer account here](https://developers.facebook.com/).
