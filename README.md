@@ -117,7 +117,10 @@ pip install -r requirements.txt
 #### Start your app
 
 - Make you have a python installation or environment and install the requirements: `pip install -r requirements.txt`
-- Run your Flask app locally by executing [run.py](https://github.com/daveebbelaar/python-whatsapp-bot/blob/main/run.py)
+- Run your Flask app locally by executing
+  ```bash
+  flask run
+  ```
 
 #### Launch ngrok
 
